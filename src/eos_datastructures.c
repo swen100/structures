@@ -16,6 +16,7 @@
 #endif
 
 #include <php.h>
+#include <ext/standard/info.h>
 
 #include "php_eos_datastructures.h"
 #include "php_eos_datastructures_internal.h"
