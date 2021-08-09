@@ -71,7 +71,6 @@ PHP_EOS_DATASTRUCTURES_API void php_eos_datastructures_set_enum_value(zval* enum
 /* {{{ function to validate a long against a ce */
 PHP_EOS_DATASTRUCTURES_API zend_bool php_eos_datastructures_check_value(zend_class_entry *ce, zend_long value)
 {
-        //php_printf("called function: check_value\n");
 	zval *val;
 	zend_bool return_value = 0;
 
@@ -268,7 +267,6 @@ static int eos_datastructures_enum_collect_constants(zval *constant_value, int n
 /* {{{ */
 static zend_object* eos_datastructures_enum_create_object(zend_class_entry *ce)
 {
-        //php_printf("called function: create_object\n");
 	eos_datastructures_enum_object *intern = NULL;
 
 	zend_object *return_value = eos_datastructures_enum_obj_ctor(ce, &intern);
@@ -302,7 +300,6 @@ static zend_object* eos_datastructures_enum_create_object(zend_class_entry *ce)
 /* {{{ */
 static zend_object* eos_datastructures_enum_clone_obj(zend_object *object) 
 {
-        //php_printf("called function: clone_obj\n");
         eos_datastructures_enum_object *new_enum;
         // copied from eos_datastructures_enum_free_obj():
         eos_datastructures_enum_object *old_enum = (eos_datastructures_enum_object*)
@@ -321,8 +318,6 @@ static zend_object* eos_datastructures_enum_clone_obj(zend_object *object)
 /* {{{ helper function for finding a valid enum value via long */
 static int eos_datastructures_enum_apply_set(zend_long *option, int num_args, va_list args, zend_hash_key *hash_key) 
 {
-        //php_printf("called function: apply_set\n");
-        
 	zend_long *value = va_arg(args, zend_long*);
 	zend_bool *found = va_arg(args, zend_bool*);
 
@@ -393,8 +388,6 @@ static void eos_datastructures_enum_object_set(zval *zobject, zval *value)
 /* {{{ */
 static int eos_datastructures_enum_cast_object(zend_object *readobj, zval *writeobj, int type)
 {
-        //php_printf("called function: cast_object\n");
-        
         eos_datastructures_enum_object *enum_object = (eos_datastructures_enum_object*)
                 ((char*)readobj - XtOffsetOf(eos_datastructures_enum_object, std));
         
@@ -407,8 +400,6 @@ static int eos_datastructures_enum_cast_object(zend_object *readobj, zval *write
 /* {{{ */
 static int eos_datastructures_enum_compare_objects(zval *z1, zval *z2)
 {
-        //php_printf("called function: compare_objects\n");
-
 	if (Z_TYPE_P(z1) == IS_OBJECT && Z_TYPE_P(z2) == IS_OBJECT &&
 		instanceof_function(Z_OBJCE_P(z1), ce_eos_datastructures_enum) &&
 		instanceof_function(Z_OBJCE_P(z2), ce_eos_datastructures_enum)) {
@@ -435,7 +426,6 @@ static int eos_datastructures_enum_compare_objects(zval *z1, zval *z2)
 /* {{{ */
 static HashTable* eos_datastructures_enum_object_get_debug_info(zend_object *object, int *is_temp)
 {
-        //php_printf("called function: get_debug_info\n");
 	HashTable *debug_info, *std_props;
 	zval elements, value;
         eos_datastructures_enum_object *enum_object = (eos_datastructures_enum_object*)
