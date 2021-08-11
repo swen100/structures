@@ -1,8 +1,8 @@
 dnl
-dnl Eos\DataStructures for PHP7
+dnl Eos\DataStructures for PHP8
 dnl
 
-PHP_ARG_WITH(eos_datastructures, Additional Datastructures for PHP7,
+PHP_ARG_WITH(eos_datastructures, Additional Datastructures for PHP8,
 [  --with-eos_datastructures            Enable datastructure support], yes)
 
 if test "$PHP_EOS_DATASTRUCTURES" != "no"; then

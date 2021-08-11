@@ -64,9 +64,10 @@ PHP_METHOD(EosDataStructuresStruct, __construct)
 	zend_string *str_idx;
 	zval *entry;
 
-	if (FAILURE == zend_parse_parameters_throw(ZEND_NUM_ARGS(), "|H", &values)) {
-		return;
-	}
+        ZEND_PARSE_PARAMETERS_START(0,1)
+                Z_PARAM_OPTIONAL
+                Z_PARAM_ARRAY_HT(values)
+        ZEND_PARSE_PARAMETERS_END();
 
 	/**
 	 * Our arguments hashtable has two different behaviors
@@ -181,15 +182,6 @@ static inline zend_bool eos_datastructures_struct_property_exists(zend_object *o
 static zval *eos_datastructure_struct_object_write_property(zend_object *object, zend_string *member, zval *value, void **cache_slot)
 {
         zval *retval = NULL;
-	/*zval tmp_member;
-
-	if(Z_TYPE_P(member) != IS_STRING) {
-		tmp_member = *member;
-		zval_copy_ctor(&tmp_member);
-		convert_to_string(&tmp_member);
-		member = &tmp_member;
-		cache_slot = NULL;
-	}*/
 
 	if(eos_datastructures_struct_property_exists(object, member)) {
 		/* This exists */
@@ -200,9 +192,6 @@ static zval *eos_datastructure_struct_object_write_property(zend_object *object,
 			ZSTR_VAL(member), object->ce->name->val);
 	}
 
-	/*if(member == &tmp_member) {
-		zval_dtor(member);
-	}*/
         return retval;
 }
 /* }}} */
@@ -210,16 +199,7 @@ static zval *eos_datastructure_struct_object_write_property(zend_object *object,
 /* {{{ */
 static zval *eos_datastructure_struct_object_read_property(zend_object *object, zend_string *member, int type, void **cache_slot, zval *rv)
 {
-	//zval tmp_member;
 	zval *retval = NULL;
-
-	/*if(Z_TYPE_P(member) != IS_STRING) {
-		tmp_member = *member;
-		zval_copy_ctor(&tmp_member);
-		convert_to_string(&tmp_member);
-		member = &tmp_member;
-		cache_slot = NULL;
-	}*/
 
 	/* mangle scope so we can get to private/protected */
 #if PHP_VERSION_ID >= 70100
@@ -239,10 +219,6 @@ static zval *eos_datastructure_struct_object_read_property(zend_object *object, 
 	EG(scope) = old_scope;
 #endif
 
-	/*if(member == &tmp_member) {
-		zval_dtor(member);
-	}*/
-
 	return retval;
 }
 /* }}} */
@@ -250,16 +226,6 @@ static zval *eos_datastructure_struct_object_read_property(zend_object *object, 
 /* {{{ */
 static void eos_datastructure_struct_object_unset_property(zend_object *object, zend_string *member, void **cache_slot)
 {
-	/*zval tmp_member;
-
-	if(Z_TYPE_P(member) != IS_STRING) {
-		tmp_member = *member;
-		zval_copy_ctor(&tmp_member);
-		convert_to_string(&tmp_member);
-		member = &tmp_member;
-		cache_slot = NULL;
-	}*/
-
 	if(eos_datastructures_struct_property_exists(object, member)) {
 		zend_throw_exception_ex(zend_ce_type_error, 0,
 			"Name %s provided is a property in struct %s and cannot be unset",
@@ -268,10 +234,6 @@ static void eos_datastructure_struct_object_unset_property(zend_object *object, 
 		/* we shouldn't ever hit this, but just in case */
 		(zend_get_std_object_handlers())->unset_property(object, member, cache_slot);
 	}
-
-	/*if(member == &tmp_member) {
-		zval_dtor(member);
-	}*/
 }
 /* }}} */
 

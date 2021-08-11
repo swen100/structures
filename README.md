@@ -1,7 +1,7 @@
 # datastructures
 PHP extensions for classes supporting common datastructures
 
-PHP 7.0 and higher
+PHP 8.0 and higher
 
 Current Structures:
 1. Structs (Generic and Defined)

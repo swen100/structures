@@ -1,6 +1,6 @@
 /* $Id$ */
 
-ARG_ENABLE("eos_datastructures", "Additional Datastructures for PHP7", "no");
+ARG_ENABLE("eos_datastructures", "Additional Datastructures for PHP8", "no");
 
 if (PHP_EOS_DATASTRUCTURES != "no") {
     configure_module_dirname = configure_module_dirname + "\\src";

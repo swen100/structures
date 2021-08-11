@@ -1,13 +1,14 @@
 /*
   +----------------------------------------------------------------------+
-  | For PHP Version 7                                                    |
+  | For PHP Version 8                                                    |
   +----------------------------------------------------------------------+
   | Copyright (c) 2015-2017 Elizabeth M Smith                            |
   +----------------------------------------------------------------------+
   | http://www.opensource.org/licenses/mit-license.php  MIT License      |
   | Also available in LICENSE                                            |
   +----------------------------------------------------------------------+
-  | Author: Elizabeth M Smith <auroraeosrose@gmail.com>                  |
+  | Authors: Elizabeth M Smith <auroraeosrose@gmail.com>                 |
+  |          Swen Zanon <swen.zanon@geoglis.de>                          |
   +----------------------------------------------------------------------+
 */
 
@@ -18,7 +19,7 @@
 
 #include <php.h>
 
-#define PHP_EOS_DATASTRUTCURES_API_VERSION "1.0.0"
+#define PHP_EOS_DATASTRUTCURES_API_VERSION "1.0.1"
 
 zend_class_entry *php_eos_datastructures_get_enum_ce(void);
 long php_eos_datastructures_get_enum_value(zval* enumclass);

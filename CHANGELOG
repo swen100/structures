@@ -1,3 +1,6 @@
+2021-08-11  Swen Zanon  <swen.zanon@geoglis.de>
+    * Ported to PHP8
+
 2015-06-30  Elizabeth M Smith  <auroraeosrose@php.net>
     * Initial Extension
     * Enum Class

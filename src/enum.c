@@ -119,9 +119,9 @@ PHP_METHOD(EosDataStructuresEnum, __construct)
 	zend_long constant_value;
 
 	/* Pass 1 - check for a string value WITHOUT juggling */
-	if (FAILURE == zend_parse_parameters_throw(ZEND_NUM_ARGS(), "z", &name)) {
-		return;
-	}
+        ZEND_PARSE_PARAMETERS_START(1,1)
+                Z_PARAM_ZVAL(name)
+        ZEND_PARSE_PARAMETERS_END();
 
 	enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(getThis());
 
@@ -173,9 +173,7 @@ PHP_METHOD(EosDataStructuresEnum, getName)
 	zval *entry;
 	//zval tmp;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
-		return;
-	}
+	ZEND_PARSE_PARAMETERS_NONE();
 
 	enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(getThis());
 
@@ -196,9 +194,7 @@ PHP_METHOD(EosDataStructuresEnum, getElements)
 {
 	eos_datastructures_enum_object *enum_object;
 
-	if (zend_parse_parameters_throw(ZEND_NUM_ARGS(), "") == FAILURE) {
-		return;
-	}
+	ZEND_PARSE_PARAMETERS_NONE();
 
 	enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(getThis());
 
@@ -406,9 +402,6 @@ static int eos_datastructures_enum_compare_objects(zval *z1, zval *z2)
 
 			eos_datastructures_enum_object *enum1 = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(z1);
 			eos_datastructures_enum_object *enum2 = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(z2);
-                        
-                        //php_printf("enum1: %d \n", enum1->value);
-                        //php_printf("enum2: %d \n", enum2->value);
                         
 			return (enum1->value == enum2->value) ? 0 : ((enum1->value < enum2->value) ? -1 : 1);
 		}
