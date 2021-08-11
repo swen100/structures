@@ -327,6 +327,11 @@ static int eos_datastructures_enum_apply_set(zend_long *option, int num_args, va
 /* }}} */
 
 /* {{{ */
+/*
+ * HINTS:
+ * The get() and set() object handlers have been removed.
+ * see https://raw.githubusercontent.com/php/php-src/PHP-8.0/UPGRADING.INTERNALS
+ */
 static void eos_datastructures_enum_object_set(zval *zobject, zval *value)
 {
 	eos_datastructures_enum_object *enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(zobject);
@@ -467,6 +472,10 @@ PHP_MINIT_FUNCTION(eos_datastructures_enum)
 	eos_datastructures_enum_object_handlers.cast_object = eos_datastructures_enum_cast_object;
 	eos_datastructures_enum_object_handlers.compare = eos_datastructures_enum_compare_objects;
 	eos_datastructures_enum_object_handlers.get_debug_info = eos_datastructures_enum_object_get_debug_info;
+        /*
+        * The get() and set() object handlers have been removed.
+        * see https://raw.githubusercontent.com/php/php-src/PHP-8.0/UPGRADING.INTERNALS
+        */
 //	eos_datastructures_enum_object_handlers.set = eos_datastructures_enum_object_set;
 
 	INIT_NS_CLASS_ENTRY(ce,  EOS_DATASTRUCTURES_NAMESPACE, "Enum", eos_datastructures_enum_methods);
