@@ -51,31 +51,5 @@ object(Fruit)#%d (2) {
   ["__value"]=>
   int(1)
 }
-object(Fruit)#%d (2) {
-  ["__elements"]=>
-  array(3) {
-    ["Apple"]=>
-    int(1)
-    ["Pear"]=>
-    int(2)
-    ["Banana"]=>
-    int(3)
-  }
-  ["__value"]=>
-  int(2)
-}
-object(Fruit)#%d (2) {
-  ["__elements"]=>
-  array(3) {
-    ["Apple"]=>
-    int(1)
-    ["Pear"]=>
-    int(2)
-    ["Banana"]=>
-    int(3)
-  }
-  ["__value"]=>
-  int(3)
-}
-Value 8 provided is not a const in enum Fruit
-Name grape provided is not a const in enum Fruit
+int(2)
+string(6) "Banana"
