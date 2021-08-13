@@ -1,6 +1,6 @@
 /*
   +----------------------------------------------------------------------+
-  | For PHP Version 7                                                    |
+  | For PHP Version 7+                                                   |
   +----------------------------------------------------------------------+
   | Copyright (c) 2015 Elizabeth M Smith                                 |
   +----------------------------------------------------------------------+
@@ -44,6 +44,7 @@ PHP_MINFO_FUNCTION(eos_datastructures)
 		"compiled as static module"
 #endif
         );
+        php_info_print_table_row(2, "Extension Version", PHP_EOS_DATASTRUCTURES_VERSION);
 	php_info_print_table_colspan_header(2, "DataTypes Available");
 	php_info_print_table_row(2, "Enum Support", "enabled");
 	php_info_print_table_row(2, "Struct Support", "enabled");
