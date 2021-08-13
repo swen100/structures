@@ -332,58 +332,55 @@ static int eos_datastructures_enum_apply_set(zend_long *option, int num_args, va
  * The get() and set() object handlers have been removed.
  * see https://raw.githubusercontent.com/php/php-src/PHP-8.0/UPGRADING.INTERNALS
  */
-static void eos_datastructures_enum_object_set(zval *zobject, zval *value)
-{
-	eos_datastructures_enum_object *enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(zobject);
-	zend_bool found = 0;
-	zend_long lvalue;
-	zval *juggled;
-
-	if (Z_TYPE_P(value) == IS_OBJECT && Z_OBJ_HANDLER_P(value, read_property)) {
-                zend_object *zobj;
-		//zval rv;
-                //juggled = Z_OBJ_HANDLER_P(value, get)(value, &rv);
-                zobj = Z_OBJ_P(zobject);
-                juggled = OBJ_PROP(zobj, 1);
-	} else {
-		juggled = value;
-	}
-
-	/* if we have a string, do a zend_hash_find FIRST */
-	if (Z_TYPE_P(juggled) == IS_STRING) {
-		zval *found_zval = zend_hash_find(enum_object->elements, Z_STR_P(juggled));
-		if(found_zval) {
-			enum_object->value = Z_LVAL_P(found_zval);
-			return;
-		}
-		/* If this is NOT a numeric string, bail, otherwise continue */
-		if(!is_numeric_string(Z_STRVAL_P(juggled), Z_STRLEN_P(juggled), NULL, NULL, 0)) {
-			zend_throw_exception_ex(zend_ce_type_error, 0,
-				"Name %s provided is not a const in enum %s",
-				Z_STRVAL_P(juggled), enum_object->std.ce->name->val);
-			return;
-		}
-	}
-
-	/* If juggled is long or a string, leave them alone, otherwise juggle */
-	if (Z_TYPE_P(juggled) != IS_LONG) {
-		convert_to_long(juggled);
-	}
-	lvalue = Z_LVAL_P(juggled);
-
-	/* handle the "easy" case of a long */
-	zend_hash_apply_with_arguments(enum_object->elements,
-		(apply_func_args_t)eos_datastructures_enum_apply_set, 2, &lvalue, &found);
-
-	if(found) {
-		enum_object->value = lvalue;
-		return;
-	} else {
-		zend_throw_exception_ex(zend_ce_type_error, 0,
-		"Value %d provided is not a const in enum %s",
-		lvalue, enum_object->std.ce->name->val);
-	}
-}
+//static void eos_datastructures_enum_object_set(zval *zobject, zval *value)
+//{
+//	eos_datastructures_enum_object *enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(zobject);
+//	zend_bool found = 0;
+//	zend_long lvalue;
+//	zval *juggled;
+//
+//	if (Z_TYPE_P(value) == IS_OBJECT && Z_OBJ_HANDLER_P(value, get)) {
+//		zval rv;
+//		juggled = Z_OBJ_HANDLER_P(value, get)(value, &rv);
+//	} else {
+//		juggled = value;
+//	}
+//
+//	/* if we have a string, do a zend_hash_find FIRST */
+//	if (Z_TYPE_P(juggled) == IS_STRING) {
+//		zval *found_zval =zend_hash_find(enum_object->elements, Z_STR_P(juggled));
+//		if(found_zval) {
+//			enum_object->value = Z_LVAL_P(found_zval);
+//			return;
+//		}
+//		/* If this is NOT a numeric string, bail, otherwise continue */
+//		if(!is_numeric_string(Z_STRVAL_P(juggled), Z_STRLEN_P(juggled), NULL, NULL, 0)) {
+//			zend_throw_exception_ex(zend_ce_type_error, 0,
+//				"Name %s provided is not a const in enum %s",
+//				Z_STRVAL_P(juggled), enum_object->std.ce->name->val);
+//			return;
+//		}
+//	}
+//
+//	/* If juggled is long or a string, leave them alone, otherwise juggle */
+//	if (Z_TYPE_P(juggled) != IS_LONG) {
+//		convert_to_long(juggled);
+//	}
+//	lvalue = Z_LVAL_P(juggled);
+//
+//	/* handle the "easy" case of a long */
+//	zend_hash_apply_with_arguments(enum_object->elements,
+//		(apply_func_args_t)eos_datastructures_enum_apply_set, 2, &lvalue, &found);
+//
+//	if(found) {
+//		enum_object->value = lvalue;
+//		return;
+//	} else {
+//		zend_throw_exception_ex(zend_ce_type_error, 0,
+//		"Value %d provided is not a const in enum %s",
+//		lvalue, enum_object->std.ce->name->val);
+//	}
+//}
 /* }}} */
 
 /* {{{ */
