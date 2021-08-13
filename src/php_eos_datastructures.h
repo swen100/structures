@@ -1,6 +1,6 @@
 /*
   +----------------------------------------------------------------------+
-  | For PHP Version 7                                                    |
+  | For PHP Version 7+                                                   |
   +----------------------------------------------------------------------+
   | Copyright (c) 2015-2017 Elizabeth M Smith                            |
   +----------------------------------------------------------------------+
@@ -19,7 +19,7 @@
 extern zend_module_entry eos_datastructures_module_entry;
 #define phpext_eos_datastructures_ptr &eos_datastructures_module_entry
 
-#define PHP_EOS_DATASTRUCTURES_VERSION "0.1.1-dev"
+#define PHP_EOS_DATASTRUCTURES_VERSION "1.0.0-dev"
 #define EOS_DATASTRUCTURES_NAMESPACE "Eos\\DataStructures"
 
 #ifdef PHP_WIN32
