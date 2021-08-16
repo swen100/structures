@@ -1,6 +1,6 @@
 /*
   +----------------------------------------------------------------------+
-  | For PHP Version 7                                                    |
+  | For PHP Version 8                                                    |
   +----------------------------------------------------------------------+
   | Copyright (c) 2015-2017 Elizabeth M Smith                            |
   +----------------------------------------------------------------------+
@@ -82,41 +82,24 @@ PHP_METHOD(EosDataStructuresStruct, __construct)
 
 			ZEND_HASH_FOREACH_STR_KEY_VAL(values, str_idx, entry) {
 				if(str_idx) {
-					//zval member;
-					//ZVAL_STR(&member, str_idx);
 					(zend_get_std_object_handlers())->write_property(Z_OBJ_P(getThis()), str_idx, entry, NULL);
-					//zval_dtor(&member);
 				}
 			} ZEND_HASH_FOREACH_END();
 
 		} else {
 
 			/* mangle scope so we can get to private/protected */
-#if PHP_VERSION_ID >= 70100
 			zend_class_entry *old_scope = EG(fake_scope);
 			EG(fake_scope) = Z_OBJCE_P(getThis());
-#else
-			zend_class_entry *old_scope = EG(scope);
-			EG(scope) = Z_OBJCE_P(getThis());
-#endif
-
 
 			ZEND_HASH_FOREACH_STR_KEY_VAL(values, str_idx, entry) {
 				if(str_idx) {
-					//zval member;
-					//ZVAL_STR(&member, str_idx);
 					eos_datastructure_struct_object_write_property(Z_OBJ_P(getThis()), str_idx, entry, NULL);
-					//zval_dtor(&member);
 				}
 			} ZEND_HASH_FOREACH_END();
 
 			/* return our scope to normal */
-#if PHP_VERSION_ID >= 70100
 			EG(fake_scope) = old_scope;
-#else
-			EG(scope) = old_scope;
-#endif
-
 		}
 	}
 }
@@ -152,14 +135,10 @@ static inline zend_bool eos_datastructures_struct_property_exists(zend_object *o
 		ret = (zend_get_std_object_handlers())->has_property(object, member, 0, NULL);
 	} else {
 		zend_property_info *property_info;
+                
 		/* mangle scope so we can get to private/protected */
-#if PHP_VERSION_ID >= 70100
 		zend_class_entry *old_scope = EG(fake_scope);
 		EG(fake_scope) = object->ce;
-#else
-		zend_class_entry *old_scope = EG(scope);
-		EG(scope) = Z_OBJCE_P(object);
-#endif
 
 		property_info = zend_get_property_info(object->ce, member, 1);
 		if(property_info!= ZEND_WRONG_PROPERTY_INFO &&
@@ -168,11 +147,7 @@ static inline zend_bool eos_datastructures_struct_property_exists(zend_object *o
 			ret = 1;
 		}
 		/* return our scope to normal */
-#if PHP_VERSION_ID >= 70100
 		EG(fake_scope) = old_scope;
-#else
-		EG(scope) = old_scope;
-#endif
 	}
 
 	return ret;
@@ -202,22 +177,13 @@ static zval *eos_datastructure_struct_object_read_property(zend_object *object, 
 	zval *retval = NULL;
 
 	/* mangle scope so we can get to private/protected */
-#if PHP_VERSION_ID >= 70100
 	zend_class_entry *old_scope = EG(fake_scope);
 	EG(fake_scope) = object->ce;
-#else
-	zend_class_entry *old_scope = EG(scope);
-	EG(scope) = Z_OBJCE_P(object);
-#endif
 
 	retval= (zend_get_std_object_handlers())->read_property(object, member, type, cache_slot, rv);
 
 	/* return our scope to normal */
-#if PHP_VERSION_ID >= 70100
 	EG(fake_scope) = old_scope;
-#else
-	EG(scope) = old_scope;
-#endif
 
 	return retval;
 }

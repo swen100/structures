@@ -15,6 +15,7 @@ eos_datastructures
                             Eos Datastructures                            
 Extension => enabled
 Type => compiled as %s module
+Extension Version => %d.%d.%s
                            DataTypes Available                           
 Enum Support => enabled
 Struct Support => enabled
