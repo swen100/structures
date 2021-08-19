@@ -31,7 +31,7 @@ typedef struct _eos_datastructures_enum_object {
 } eos_datastructures_enum_object;
 
 #define EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(zv) ((eos_datastructures_enum_object*) \
-	(((char*)Z_OBJ_P(zv)) - XtOffsetOf(eos_datastructures_enum_object, std)))
+	(((char*)zv) - XtOffsetOf(eos_datastructures_enum_object, std)))
 
 static int eos_datastructures_enum_apply_set(zend_long *option, int num_args, va_list args, zend_hash_key *hash_key);
 
@@ -42,7 +42,7 @@ static int eos_datastructures_enum_apply_set(zend_long *option, int num_args, va
 /* {{{ function to take a zval** enum instance and give you back the long value */
 PHP_EOS_DATASTRUCTURES_API zend_long php_eos_datastructures_get_enum_value(zval* enumclass)
 {
-	eos_datastructures_enum_object *enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(enumclass);
+	eos_datastructures_enum_object *enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(Z_OBJ_P(enumclass));
 	return enum_object->value;
 }
 /* }}} */
@@ -51,7 +51,7 @@ PHP_EOS_DATASTRUCTURES_API zend_long php_eos_datastructures_get_enum_value(zval*
 PHP_EOS_DATASTRUCTURES_API void php_eos_datastructures_set_enum_value(zval* enumclass, zend_long value)
 {
 	zend_bool found = 0;
-	eos_datastructures_enum_object *enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(enumclass);
+	eos_datastructures_enum_object *enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(Z_OBJ_P(enumclass));
 
 	/* handle the "easy" case of a long */
 	zend_hash_apply_with_arguments(enum_object->elements,
@@ -123,7 +123,7 @@ PHP_METHOD(EosDataStructuresEnum, __construct)
                 Z_PARAM_ZVAL(name)
         ZEND_PARSE_PARAMETERS_END();
 
-	enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(getThis());
+	enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(Z_OBJ_P(getThis()));
 
 	/* If we are given a string, look up a constant name */
 	if(Z_TYPE_P(name) == IS_STRING) {
@@ -171,11 +171,10 @@ PHP_METHOD(EosDataStructuresEnum, getName)
 	zend_ulong num_idx;
 	zend_string *str_idx;
 	zval *entry;
-	//zval tmp;
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
-	enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(getThis());
+	enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(Z_OBJ_P(getThis()));
 
 	ZEND_HASH_FOREACH_KEY_VAL(enum_object->elements, num_idx, str_idx, entry) {
 		if(Z_LVAL_P(entry) == enum_object->value) {
@@ -196,7 +195,7 @@ PHP_METHOD(EosDataStructuresEnum, getElements)
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
-	enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(getThis());
+	enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(Z_OBJ_P(getThis()));
 
 	array_init(return_value);
 	zend_hash_copy(Z_ARRVAL_P(return_value), enum_object->elements, zval_add_ref);
@@ -250,6 +249,7 @@ static zend_object* eos_datastructures_enum_create_object(zend_class_entry *ce)
 	ALLOC_HASHTABLE(intern->elements);
 	zend_hash_init(intern->elements, 8, NULL, NULL, 0);
 
+#if PHP_VERSION_ID >= 70100
 	int count = zend_hash_num_elements(&ce->constants_table);
 	if (count > 0) {
 		zend_string *key;
@@ -264,6 +264,7 @@ static zend_object* eos_datastructures_enum_create_object(zend_class_entry *ce)
 			zend_hash_add(intern->elements, key, value);
 		} ZEND_HASH_FOREACH_END();
 	}
+#endif
 
 	object_properties_init(&(intern->std), ce);
 	return return_value;
@@ -274,9 +275,7 @@ static zend_object* eos_datastructures_enum_create_object(zend_class_entry *ce)
 static zend_object* eos_datastructures_enum_clone_obj(zend_object *object) 
 {
         eos_datastructures_enum_object *new_enum;
-        // copied from eos_datastructures_enum_free_obj():
-        eos_datastructures_enum_object *old_enum = (eos_datastructures_enum_object*)
-                ((char*)object - XtOffsetOf(eos_datastructures_enum_object, std));
+        eos_datastructures_enum_object *old_enum = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(object);
         zend_object *return_value = eos_datastructures_enum_obj_ctor(object->ce, &new_enum);
 
         new_enum->value = old_enum->value;
@@ -304,11 +303,6 @@ static int eos_datastructures_enum_apply_set(zend_long *option, int num_args, va
 /* }}} */
 
 /* {{{ */
-/*
- * HINTS:
- * The get() and set() object handlers have been removed.
- * see https://raw.githubusercontent.com/php/php-src/PHP-8.0/UPGRADING.INTERNALS
- */
 //static void eos_datastructures_enum_object_set(zval *zobject, zval *value)
 //{
 //	eos_datastructures_enum_object *enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(zobject);
@@ -363,9 +357,8 @@ static int eos_datastructures_enum_apply_set(zend_long *option, int num_args, va
 /* {{{ */
 static int eos_datastructures_enum_cast_object(zend_object *readobj, zval *writeobj, int type)
 {
-        eos_datastructures_enum_object *enum_object = (eos_datastructures_enum_object*)
-                ((char*)readobj - XtOffsetOf(eos_datastructures_enum_object, std));
-        
+	eos_datastructures_enum_object *enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(readobj);
+
 	ZVAL_LONG(writeobj, enum_object->value);
 	convert_to_explicit_type(writeobj, type);
 	return SUCCESS;
@@ -379,8 +372,8 @@ static int eos_datastructures_enum_compare_objects(zval *z1, zval *z2)
 		instanceof_function(Z_OBJCE_P(z1), ce_eos_datastructures_enum) &&
 		instanceof_function(Z_OBJCE_P(z2), ce_eos_datastructures_enum)) {
 
-			eos_datastructures_enum_object *enum1 = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(z1);
-			eos_datastructures_enum_object *enum2 = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(z2);
+			eos_datastructures_enum_object *enum1 = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(Z_OBJ_P(z1));
+			eos_datastructures_enum_object *enum2 = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(Z_OBJ_P(z2));
                         
 			return (enum1->value == enum2->value) ? 0 : ((enum1->value < enum2->value) ? -1 : 1);
 		}
@@ -396,14 +389,13 @@ static int eos_datastructures_enum_compare_objects(zval *z1, zval *z2)
 /* }}} */
 
 /* {{{ */
-static HashTable* eos_datastructures_enum_object_get_debug_info(zend_object *object, int *is_temp)
+static HashTable* eos_datastructures_enum_object_get_debug_info(zend_object *obj, int *is_temp)
 {
 	HashTable *debug_info, *std_props;
 	zval elements, value;
-        eos_datastructures_enum_object *enum_object = (eos_datastructures_enum_object*)
-                ((char*)object - XtOffsetOf(eos_datastructures_enum_object, std));
+        eos_datastructures_enum_object *enum_object = EOS_DATASTRUCTURES_ENUM_FETCH_OBJ(obj);
         
-	std_props = zend_std_get_properties(object);
+	std_props = zend_std_get_properties(obj);
 	debug_info = zend_array_dup(std_props);
 
 	array_init(&elements);
@@ -447,7 +439,7 @@ PHP_MINIT_FUNCTION(eos_datastructures_enum)
 	eos_datastructures_enum_object_handlers.compare = eos_datastructures_enum_compare_objects;
 	eos_datastructures_enum_object_handlers.get_debug_info = eos_datastructures_enum_object_get_debug_info;
         /*
-        * The get() and set() object handlers have been removed.
+        * The set() object handler has been removed.
         * see https://raw.githubusercontent.com/php/php-src/PHP-8.0/UPGRADING.INTERNALS
         */
 //	eos_datastructures_enum_object_handlers.set = eos_datastructures_enum_object_set;
