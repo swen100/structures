@@ -62,7 +62,7 @@ PHP_EOS_DATASTRUCTURES_API void php_eos_datastructures_set_enum_value(zval* enum
 		return;
 	} else {
 		zend_throw_exception_ex(zend_ce_type_error, 0,
-			"Value %d provided is not a const in enum %s",
+			"Value %ld provided is not a const in enum %s",
 			value, enum_object->std.ce->name->val);
 	}
 }
@@ -86,7 +86,7 @@ PHP_EOS_DATASTRUCTURES_API zend_bool php_eos_datastructures_check_value(zend_cla
 
 	if(!return_value) {
 		zend_throw_exception_ex(zend_ce_type_error, 0,
-			"Value %d provided is not a const in enum %s",
+			"Value %ld provided is not a const in enum %s",
 			value, ce->name->val);
 	}
 	return return_value;
@@ -155,7 +155,7 @@ PHP_METHOD(EosDataStructuresEnum, __construct)
 	}
 
 	zend_throw_exception_ex(zend_ce_type_error, 0,
-		"Value %d provided is not a const in enum %s",
+		"Value %ld provided is not a const in enum %s",
 		constant_value, enum_object->std.ce->name->val);
 }
 /* }}} */
