@@ -29,4 +29,4 @@ try {
 --EXPECTF--
 string(5) "Apple"
 string(4) "Pear"
-Eos\DataStructures\Enum::getName() expects exactly 0 parameters, 1 given
+Eos\DataStructures\Enum::getName() expects exactly 0 %s, 1 given

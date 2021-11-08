@@ -48,4 +48,4 @@ array(2) {
   ["Pear"]=>
   int(0)
 }
-Eos\DataStructures\Enum::getElements() expects exactly 0 parameters, 1 given
+Eos\DataStructures\Enum::getElements() expects exactly 0 %s, 1 given

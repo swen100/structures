@@ -45,8 +45,8 @@ $fruit->pear = 5;
 var_dump($fruit);
 ?>
 --EXPECTF--
-Eos\DataStructures\Struct::__construct() expects parameter 1 to be array, integer given
-Eos\DataStructures\Struct::__construct() expects at most 1 parameter, 2 given
+Eos\DataStructures\Struct::__construct(): Argument #1 ($values) must be of type array, int given
+Eos\DataStructures\Struct::__construct() expects at most 1 %s, 2 given
 Name badfruit provided is not a property in struct Fruit
 object(Fruit)#%d (2) {
   ["apple"]=>

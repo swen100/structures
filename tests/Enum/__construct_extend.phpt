@@ -48,7 +48,7 @@ try {
     echo $e->getMessage(), PHP_EOL;
 }
 ?>
---EXPECT--
+--EXPECTF--
 Value 1 provided is not a const in enum Test
 Name apple provided is not a const in enum Fruit
 Value 6 provided is not a const in enum Fruit
@@ -58,4 +58,4 @@ Value 6 provided is not a const in enum Fruit
 2
 2
 2
-Eos\DataStructures\Enum::__construct() expects exactly 1 parameter, 0 given
+Eos\DataStructures\Enum::__construct() expects exactly 1 %s, 0 given

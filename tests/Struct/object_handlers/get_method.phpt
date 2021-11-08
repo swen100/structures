@@ -31,4 +31,5 @@ object(Fruit)#%d (1) {
   ["apple"]=>
   NULL
 }
-Object does not support method calls
+
+Fatal error: Object does not support method calls %s
