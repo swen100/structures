@@ -2,11 +2,10 @@ sudo: false
 
 language: php
 
-dist: trusty
+dist: bionic
 
 php:
   - 8.0
-  - 8.1
   - nightly
  
 env: 
@@ -22,4 +21,4 @@ script:
 
 notifications:
   email:
-    auroraeosrose@gmail.com
+    swen.zanon@geoglis.de
